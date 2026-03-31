@@ -1,0 +1,46 @@
+<div class="home-wrapper">
+
+  <!-- Page header -->
+  <header class="page-header">
+    <h1 class="page-title">Text <span class="accent">Formatter</span></h1>
+    <p class="page-subtitle">Transform · Style · Analyze</p>
+  </header>
+
+  <!-- Two-column layout: TextDisplay (left) + Formatters (right) -->
+  <div class="columns">
+
+    <!-- LEFT: TextDisplay child component -->
+    <!-- @Input: passes text & styles DOWN -->
+    <!-- @Output: receives typing events UP -->
+    <app-text-display
+      class="col"
+      [outputText]="outputText"
+      [isBold]="isBold"
+      [isItalic]="isItalic"
+      [isUnderline]="isUnderline"
+      [textColor]="textColor"
+      [fontSize]="fontSize"
+      (inputChanged)="onInputChange($event)">
+    </app-text-display>
+
+    <!-- RIGHT: Formatters child component -->
+    <!-- @Output: all formatter actions emit UP to parent -->
+    <app-formatters
+      class="col"
+      [textColor]="textColor"
+      (clearAll)="onClearAll()"
+      (removeExtraSpaces)="onRemoveExtraSpaces()"
+      (reverseSentence)="onReverseSentence()"
+      (removeSpecialChars)="onRemoveSpecialChars()"
+      (capitalizeWords)="onCapitalizeWords()"
+      (toggleBold)="onToggleBold()"
+      (toggleItalic)="onToggleItalic()"
+      (toggleUnderline)="onToggleUnderline()"
+      (colorChange)="onColorChange($event)"
+      (removeStyling)="onRemoveStyling()"
+      (increaseFontSize)="onIncreaseFontSize()"
+      (decreaseFontSize)="onDecreaseFontSize()">
+    </app-formatters>
+
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="panel">
+
+  <!-- INPUT BOX -->
+  <div class="field-group">
+    <label class="field-label">
+      <span class="label-dot input-dot"></span>
+      Input
+    </label>
+    <textarea
+      class="text-area"
+      placeholder="Start typing your text here…"
+      [ngModel]="localInput"
+      (ngModelChange)="onType($event)"
+      rows="10"
+      spellcheck="true"
+      aria-label="Text input">
+    </textarea>
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <span class="divider-icon">↓</span>
+  </div>
+
+  <!-- OUTPUT / PREVIEW BOX -->
+  <div class="field-group">
+    <label class="field-label">
+      <span class="label-dot output-dot"></span>
+      Preview
+    </label>
+
+    <!-- [ngStyle] applies styling from @Input props -->
+    <div
+      class="preview-box"
+      [ngStyle]="previewStyle"
+      aria-label="Formatted preview"
+      aria-live="polite">
+
+      <!-- Show placeholder when empty -->
+      <ng-container *ngIf="outputText; else emptyState">
+        {{ outputText }}
+      </ng-container>
+      <ng-template #emptyState>
+        <span class="preview-empty">Formatted output will appear here…</span>
+      </ng-template>
+
+    </div>
+  </div>
+
+</div>

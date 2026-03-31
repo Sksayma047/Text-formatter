@@ -1,0 +1,101 @@
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Field Group */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.label-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.input-dot  { background: var(--accent2); }
+.output-dot { background: var(--accent); }
+
+/* Textarea */
+.text-area {
+  width: 100%;
+  min-height: 200px;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.7;
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.text-area:focus {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 3px rgba(91, 106, 240, 0.12);
+}
+
+.text-area::placeholder {
+  color: var(--text-muted);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider-icon {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-size: 14px;
+}
+
+/* Preview Box */
+.preview-box {
+  min-height: 200px;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 16px;       /* overridden by [ngStyle] */
+  line-height: 1.7;
+  word-break: break-word;
+  white-space: pre-wrap;
+  transition: font-size 0.15s ease, color 0.15s ease;
+}
+
+.preview-empty {
+  color: var(--text-muted);
+  font-style: italic;
+}

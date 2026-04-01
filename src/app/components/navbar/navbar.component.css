@@ -67,3 +67,65 @@
   color: var(--accent);
   line-height: 1.2;
 }
+/* Navigation Links */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text);
+  background: var(--surface2);
+  border-color: var(--border);
+}
+
+.nav-icon {
+  font-size: 14px;
+}
+
+/* APIs link — special accent */
+.nav-link-api {
+  border-color: var(--border);
+}
+
+.nav-link-api:hover,
+.nav-link-api.active-link {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: #fff !important;
+}
+
+/* Active state (routerLinkActive) */
+.active-link {
+  color: var(--accent) !important;
+  background: rgba(200, 241, 53, 0.08);
+  border-color: rgba(200, 241, 53, 0.25);
+}
+
+.navbar-tagline {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+@media (max-width: 600px) {
+  .navbar-tagline { display: none; }
+  .navbar { padding: 0 16px; }
+}

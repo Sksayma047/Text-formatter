@@ -1,0 +1,302 @@
+<div class="apis-wrapper">
+
+  <!-- ══ PAGE HEADER ══════════════════════════════════════════ -->
+  <header class="page-header">
+    <h1 class="page-title">API <span class="accent">Explorer</span></h1>
+    <p class="page-subtitle">JSONPlaceholder · jsonplaceholder.typicode.com</p>
+  </header>
+
+  <div class="api-layout">
+
+    <!-- ══════════════════════════════════════════════════════
+         LEFT PANEL — Controls
+    ══════════════════════════════════════════════════════ -->
+    <div class="left-panel">
+
+      <!-- ── RESOURCE SELECTOR ── -->
+      <div class="section-block">
+        <div class="section-heading">
+          <span class="section-dot blue-dot"></span> Resource
+        </div>
+        <div class="endpoint-grid">
+          <button
+            *ngFor="let ep of endpoints"
+            class="ep-btn"
+            [class.ep-active]="selectedEndpoint === ep"
+            (click)="selectedEndpoint = ep; onEndpointChange()">
+            <span class="ep-name">/{{ ep }}</span>
+            <span class="ep-count">{{ endpointInfo[ep].count }}</span>
+          </button>
+        </div>
+        <div class="ep-info">
+          <span class="ep-info-text">{{ endpointInfo[selectedEndpoint].desc }}</span>
+        </div>
+      </div>
+
+      <!-- ── RESOURCE ID ── -->
+      <div class="section-block">
+        <div class="section-heading">
+          <span class="section-dot lime-dot"></span> Resource ID
+          <span class="section-hint">required for PUT · PATCH · DELETE</span>
+        </div>
+        <input
+          class="inp"
+          type="number"
+          min="1"
+          placeholder="e.g. 1"
+          [(ngModel)]="resourceId"
+          (input)="validationMsg = ''"
+        />
+        <div class="validation-msg" *ngIf="validationMsg">
+          <span class="vmsg-icon">⚠</span> {{ validationMsg }}
+        </div>
+      </div>
+
+      <!-- ── FILTER PARAM ── -->
+      <div class="section-block">
+        <div class="section-heading">
+          <span class="section-dot purple-dot"></span> Filter Param
+          <span class="section-hint">for GET-all (e.g. userId=1)</span>
+        </div>
+        <input
+          class="inp"
+          type="text"
+          placeholder="e.g. userId=1  or  postId=2"
+          [(ngModel)]="filterParam"
+        />
+      </div>
+
+      <!-- ── NESTED ROUTES ── -->
+      <div class="section-block" *ngIf="currentNested.length > 0">
+        <div class="section-heading">
+          <span class="section-dot orange-dot"></span> Nested Route
+          <span class="section-hint">GET nested by ID</span>
+        </div>
+        <div class="nested-btns">
+          <button class="nested-btn" [class.nested-active]="selectedNested === ''"
+            (click)="selectedNested = ''">None</button>
+          <button *ngFor="let nr of currentNested"
+            class="nested-btn" [class.nested-active]="selectedNested === nr.path"
+            (click)="selectedNested = nr.path">
+            /{{ nr.path }}
+          </button>
+        </div>
+      </div>
+
+      <!-- ── URL PREVIEW ── -->
+      <div class="url-preview-block">
+        <span class="url-badge">URL</span>
+        <span class="url-text">
+          https://jsonplaceholder.typicode.com/{{ selectedEndpoint }}<ng-container *ngIf="resourceId">/{{ resourceId }}</ng-container><ng-container *ngIf="selectedNested && resourceId">/{{ selectedNested }}</ng-container><ng-container *ngIf="filterParam && !resourceId">?{{ filterParam }}</ng-container>
+        </span>
+      </div>
+
+      <!-- ── ACTION BUTTONS ── -->
+      <div class="section-block">
+        <div class="section-heading">
+          <span class="section-dot lime-dot"></span> Actions
+        </div>
+        <div class="action-grid">
+          <button class="action-btn get-btn"    (click)="onGet()"    [disabled]="isLoading">
+            <span class="method-pill get-pill">GET</span>
+            <span class="action-label">Fetch</span>
+          </button>
+          <button class="action-btn post-btn"   (click)="onPost()"   [disabled]="isLoading">
+            <span class="method-pill post-pill">POST</span>
+            <span class="action-label">Create</span>
+          </button>
+          <button class="action-btn put-btn"    (click)="onPut()"    [disabled]="isLoading">
+            <span class="method-pill put-pill">PUT</span>
+            <span class="action-label">Update</span>
+          </button>
+          <button class="action-btn patch-btn"  (click)="onPatch()"  [disabled]="isLoading">
+            <span class="method-pill patch-pill">PATCH</span>
+            <span class="action-label">Partial</span>
+          </button>
+          <button class="action-btn delete-btn" (click)="onDelete()" [disabled]="isLoading">
+            <span class="method-pill delete-pill">DELETE</span>
+            <span class="action-label">Delete</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── REQUEST BODY ── -->
+      <div class="section-block">
+        <div class="section-heading">
+          <span class="section-dot orange-dot"></span> Request Body
+          <span class="section-hint">POST · PUT · PATCH</span>
+        </div>
+        <textarea class="body-area" [(ngModel)]="inputBody" rows="9" spellcheck="false"></textarea>
+      </div>
+
+    </div><!-- /left-panel -->
+
+
+    <!-- ══════════════════════════════════════════════════════
+         RIGHT PANEL
+    ══════════════════════════════════════════════════════ -->
+    <div class="right-panel">
+
+      <!-- ════ RESPONSE DATA BOX ════ -->
+      <div class="output-box response-box">
+
+        <div class="output-header">
+          <div class="output-header-left">
+            <span class="output-dot resp-dot"></span>
+            <span class="output-title">Response Data</span>
+          </div>
+          <div class="output-header-right">
+            <ng-container *ngIf="lastMethod && !isLoading">
+              <span class="method-chip" [style.background]="methodColor(lastMethod)">{{ lastMethod }}</span>
+              <span class="status-chip ok"  *ngIf="responseStatus && responseStatus < 300">{{ responseStatus }} OK</span>
+              <span class="status-chip err" *ngIf="responseStatus && responseStatus >= 400">{{ responseStatus }} ERR</span>
+            </ng-container>
+            <div class="spinner" *ngIf="isLoading">
+              <div class="spin-dot"></div><div class="spin-dot"></div><div class="spin-dot"></div>
+              <span class="spin-label">Loading…</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="last-url-bar" *ngIf="lastUrl && !isLoading">
+          <span class="last-url-label">→</span>
+          <span class="last-url-text">{{ lastUrl }}</span>
+        </div>
+
+        <div class="output-body response-body-scroll">
+
+          <!-- Shimmer -->
+          <div class="shimmer-wrap" *ngIf="isLoading">
+            <div class="shimmer-row" *ngFor="let i of [1,2,3,4,5,6]">
+              <div class="shimmer-key"></div><div class="shimmer-val"></div>
+            </div>
+          </div>
+
+          <!-- Photo endpoint -->
+          <ng-container *ngIf="responseData && !isLoading && isPhotoEndpoint && !isListResponse">
+            <div class="photo-card">
+              <div class="photo-meta-pills">
+                <div class="meta-pill" *ngFor="let row of flatResponse">
+                  <ng-container *ngIf="row.key !== 'url' && row.key !== 'thumbnailUrl'">
+                    <span class="meta-k">{{ row.key }}</span>
+                    <span class="meta-v">{{ row.value }}</span>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="photo-display">
+                <div class="photo-side">
+                  <div class="photo-side-label">Thumbnail</div>
+                  <img [src]="responseData?.thumbnailUrl" [alt]="responseData?.title" class="thumb-img"
+                    (error)="$any($event.target).src='https://via.placeholder.com/150?text=No+Image'" />
+                </div>
+                <div class="photo-side">
+                  <div class="photo-side-label">Full URL</div>
+                  <a [href]="responseData?.url" target="_blank" class="img-url-link">{{ responseData?.url }}</a>
+                  <div class="photo-side-label" style="margin-top:12px">Preview</div>
+                  <img [src]="responseData?.url" [alt]="responseData?.title" class="full-img"
+                    (error)="$any($event.target).style.display='none'" />
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- List response -->
+          <ng-container *ngIf="responseData && !isLoading && isListResponse">
+            <div class="list-info">
+              <span class="list-count">{{ responseList.length }} records</span>
+            </div>
+            <div class="response-table list-table">
+              <div class="table-head">
+                <span class="th-cell" *ngFor="let k of flatResponse">{{ k.key }}</span>
+              </div>
+              <div class="table-data-row" *ngFor="let item of responseList; let i = index" [class.alt-row]="i % 2 === 0">
+                <span class="td-cell" *ngFor="let k of flatResponse">
+                  <ng-container *ngIf="isObject(item[k.key]); else tdPlain">
+                    <span class="obj-badge">&#123; … &#125;</span>
+                  </ng-container>
+                  <ng-template #tdPlain>{{ item[k.key] }}</ng-template>
+                </span>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Single object -->
+          <ng-container *ngIf="responseData && !isLoading && !isListResponse && !isPhotoEndpoint">
+            <div class="response-table single-table">
+              <div class="table-row header-row">
+                <span class="row-key col-head">Field</span>
+                <span class="row-val col-head">Value</span>
+              </div>
+              <div class="table-row" *ngFor="let row of flatResponse; let i = index" [class.alt-row]="i % 2 === 0">
+                <span class="row-key">{{ row.key }}</span>
+                <span class="row-val">
+                  <ng-container *ngIf="isObject(row.value); else plainVal">
+                    <pre class="nested-json">{{ row.value | json }}</pre>
+                  </ng-container>
+                  <ng-template #plainVal>
+                    <span [class.bool-true]="row.value === true" [class.bool-false]="row.value === false">
+                      {{ row.value }}
+                    </span>
+                  </ng-template>
+                </span>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Empty state -->
+          <div class="empty-state" *ngIf="!responseData && !isLoading">
+            <div class="empty-icon">⟳</div>
+            <div class="empty-text">No response yet</div>
+            <div class="empty-hint">Pick a resource, enter an ID and hit an action</div>
+          </div>
+
+        </div>
+      </div><!-- /response-box -->
+
+
+      <!-- ════ ERROR MESSAGE BOX ════ -->
+      <div class="output-box error-box" [class.error-active]="errorMsg">
+
+        <div class="output-header error-header">
+          <div class="output-header-left">
+            <span class="output-dot error-dot" [class.dot-blink]="errorMsg"></span>
+            <span class="output-title">Error Message</span>
+          </div>
+          <button class="clear-btn" *ngIf="errorMsg" (click)="errorMsg = ''">✕ Clear</button>
+        </div>
+
+        <div class="output-body error-body-content">
+
+          <ng-container *ngIf="errorMsg">
+            <div class="error-card">
+              <div class="error-icon-wrap">
+                <div class="error-circle">✕</div>
+              </div>
+              <div class="error-details">
+                <div class="error-title-txt">Request Failed</div>
+                <div class="error-msg-txt">{{ errorMsg }}</div>
+                <div class="error-chips">
+                  <span class="e-chip method-chip-e" [style.background]="methodColor(lastMethod)" *ngIf="lastMethod">{{ lastMethod }}</span>
+                  <span class="e-chip url-chip"  *ngIf="lastUrl">{{ lastUrl }}</span>
+                  <span class="e-chip time-chip" *ngIf="errorTime">🕐 {{ errorTime }}</span>
+                </div>
+                <div class="error-hint" *ngIf="errorMsg.includes('404')">
+                  💡 Not found. Valid IDs for <strong>/{{ selectedEndpoint }}</strong> are 1–{{ endpointInfo[selectedEndpoint].count }}.
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!errorMsg">
+            <div class="no-error-state">
+              <span class="no-error-icon">✓</span>
+              <span class="no-error-text">No errors — all clear</span>
+            </div>
+          </ng-container>
+
+        </div>
+      </div><!-- /error-box -->
+
+    </div><!-- /right-panel -->
+  </div><!-- /api-layout -->
+</div>

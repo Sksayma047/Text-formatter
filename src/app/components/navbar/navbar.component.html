@@ -4,16 +4,11 @@
     <span class="brand-icon">✦</span>
     <span class="brand-name">My 1stAngular Project</span>
   </div>
-
-  <!-- Live stats badges driven by BehaviorSubject Observables -->
-  <!-- <div class="navbar-stats">
-    <div class="stat-badge">
-      <span class="stat-label">words</span>
-      <span class="stat-value">{{ wordCount$ | async }}</span>
-    </div>
-    <div class="stat-badge">
-      <span class="stat-label">chars</span>
-      <span class="stat-value">{{ charCount$ | async }}</span>
-    </div>
-  </div> -->
+  <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" class="nav-link">
+      <span class="nav-icon">✎</span> Formatter
+    </a>
+    <a routerLink="/apis" routerLinkActive="active-link" class="nav-link nav-link-api">
+      <span class="nav-icon">⚡</span> APIs
+  </a>
+  <div class="navbar-tagline">Transform · Style · Analyze</div>
 </nav>

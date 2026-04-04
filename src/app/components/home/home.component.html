@@ -1,19 +1,10 @@
-<div class="home-wrapper">
+<div class="page-wrapper">
 
-  <!-- Page header -->
-  <header class="page-header">
-    <h1 class="page-title">Text <span class="accent">Formatter</span></h1>
-    <p class="page-subtitle">Transform · Style · Analyze</p>
-  </header>
+  <!-- ── Two Column Body ── -->
+  <div class="page-body">
 
-  <!-- Two-column layout: TextDisplay (left) + Formatters (right) -->
-  <div class="columns">
-
-    <!-- LEFT: TextDisplay child component -->
-    <!-- @Input: passes text & styles DOWN -->
-    <!-- @Output: receives typing events UP -->
+    <!-- LEFT: Text boxes -->
     <app-text-display
-      class="col"
       [outputText]="outputText"
       [isBold]="isBold"
       [isItalic]="isItalic"
@@ -23,10 +14,8 @@
       (inputChanged)="onInputChange($event)">
     </app-text-display>
 
-    <!-- RIGHT: Formatters child component -->
-    <!-- @Output: all formatter actions emit UP to parent -->
+    <!-- RIGHT: Stats + Buttons -->
     <app-formatters
-      class="col"
       [textColor]="textColor"
       (clearAll)="onClearAll()"
       (removeExtraSpaces)="onRemoveExtraSpaces()"

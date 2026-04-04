@@ -2,32 +2,21 @@ import { Component } from '@angular/core';
 import { RemoveSpecialCharsPipe } from '../../pipes/remove-special-chars.pipe';
 import { TextStatsService } from '../../services/text-stats.service';
 
-/**
- * HomeComponent — Parent
- * ----------------------
- * Owns the master `text` and `outputText` state.
- * Passes data down to children via @Input.
- * Receives formatter commands from children via @Output.
- */
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers: [RemoveSpecialCharsPipe] // Inject pipe for programmatic use
+  providers: [RemoveSpecialCharsPipe]
 })
 export class HomeComponent {
 
-  /** Raw input text — bound to TextDisplay's textarea */
-  inputText: string = '';
-
-  /** Processed output text — passed to TextDisplay for preview */
+  inputText: string  = '';
   outputText: string = '';
 
-  /** Styling state passed down to TextDisplay */
   isBold: boolean      = false;
   isItalic: boolean    = false;
   isUnderline: boolean = false;
-  textColor: string    = '#e8e8f0';
+  textColor: string    = '#111111';   
   fontSize: number     = 16;
 
   constructor(
@@ -35,14 +24,11 @@ export class HomeComponent {
     private statsService: TextStatsService
   ) {}
 
-  // Called by TextDisplay when user types
   onInputChange(text: string): void {
     this.inputText  = text;
-    this.outputText = text; // live mirror by default
+    this.outputText = text;
     this.statsService.updateStats(text);
   }
-
-  // Called by Formatters child via @Output
 
   onClearAll(): void {
     this.inputText  = '';
@@ -55,23 +41,21 @@ export class HomeComponent {
     this.statsService.updateStats(this.outputText);
   }
 
+
   onReverseSentence(): void {
-    this.outputText = this.outputText.split(' ').reverse().join(' ');
+    this.outputText = this.outputText.split('').reverse().join('');
   }
 
   onRemoveSpecialChars(): void {
-    // Use the custom pipe
     this.outputText = this.pipe.transform(this.outputText);
     this.statsService.updateStats(this.outputText);
   }
 
+
   onCapitalizeWords(): void {
-    this.outputText = this.outputText
-      .toLowerCase()
-      .replace(/\b\w/g, char => char.toUpperCase());
+    this.outputText = this.outputText.toUpperCase();
   }
 
-  // Styling events
   onToggleBold(): void      { this.isBold      = !this.isBold; }
   onToggleItalic(): void    { this.isItalic    = !this.isItalic; }
   onToggleUnderline(): void { this.isUnderline = !this.isUnderline; }
@@ -82,7 +66,7 @@ export class HomeComponent {
     this.isBold      = false;
     this.isItalic    = false;
     this.isUnderline = false;
-    this.textColor   = '#e8e8f0';
+    this.textColor   = '#111111';   
     this.fontSize    = 16;
   }
 

@@ -22,7 +22,7 @@ export class TextDisplayComponent implements OnChanges {
   @Input() isBold:      boolean = false;
   @Input() isItalic:    boolean = false;
   @Input() isUnderline: boolean = false;
-  @Input() textColor:   string  = '#e8e8f0';
+  @Input() textColor:   string  = '#111111';
   @Input() fontSize:    number  = 16;
 
   // Output to Parent

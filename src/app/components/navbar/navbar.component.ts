@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { TextStatsService } from '../../services/text-stats.service';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -9,12 +8,16 @@ import { Observable } from 'rxjs';
 })
 export class NavbarComponent {
 
-  // Subscribe to live stats from the service
-  wordCount$: Observable<number>;
-  charCount$: Observable<number>;
+  constructor(public router: Router) {}
 
-  constructor(private statsService: TextStatsService) {
-    this.wordCount$ = this.statsService.wordCount$;
-    this.charCount$ = this.statsService.charCount$;
+  goTo(path: string): void {
+    this.router.navigate([path]);
+  }
+
+  isActive(path: string): boolean {
+    if (path === '/') {
+      return this.router.url === '/' || this.router.url === '';
+    }
+    return this.router.url.startsWith(path);
   }
 }

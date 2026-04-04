@@ -1,104 +1,74 @@
-<div class="panel formatters-panel">
-  <!-- STATS PANEL — above all operations -->
-  <section class="stats-section">
-    <h3 class="section-label">Live Stats</h3>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <span class="stat-value">{{ wordCount$ | async }}</span>
-        <span class="stat-label">Words</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value">{{ charCount$ | async }}</span>
-        <span class="stat-label">Characters</span>
-      </div>
+<div class="right-panel">
+
+  <!-- ── STATS BLOCK ── -->
+  <div class="stats-block">
+    <div class="stat-row">
+      <span class="stat-key">Word Count: </span>
+      <span class="stat-val">{{ wordCount$ | async }} Words</span>
     </div>
-  </section>
-  
-  <div class="panel-title">
-    <span>Operations</span>
+    <div class="stat-row">
+      <span class="stat-key">Char Count: </span>
+      <span class="stat-val">{{ charCount$ | async }} Chars</span>
+    </div>
   </div>
 
-  <!-- TEXT OPERATIONS -->
-  <section class="section">
-    <h3 class="section-label">Text</h3>
-    <div class="btn-grid">
+  <!-- ── OPERATIONS BLOCK ── -->
+  <div class="ops-block">
 
-      <button class="btn btn-danger" (click)="clearAll.emit()" title="Clear all text">
-        <span class="btn-icon">✕</span> Clear All
-      </button>
-
-      <button class="btn" (click)="removeExtraSpaces.emit()" title="Collapse multiple spaces">
-        <span class="btn-icon">⎵</span> Remove Spaces
-      </button>
-
-      <button class="btn" (click)="reverseSentence.emit()" title="Reverse word order">
-        <span class="btn-icon">⇆</span> Reverse
-      </button>
-
-      <!-- Uses RemoveSpecialCharsPipe internally in parent -->
-      <button class="btn" (click)="removeSpecialChars.emit()" title="Strip special characters">
-        <span class="btn-icon">∅</span> No Specials
-      </button>
-
-      <button class="btn btn-wide" (click)="capitalizeWords.emit()" title="Capitalize every word">
-        <span class="btn-icon">Aa</span> Capitalize Words
-      </button>
-
+    <!-- Row 1 -->
+    <div class="btn-row">
+      <button class="op-btn" (click)="clearAll.emit()">Clear All</button>
+      <button class="op-btn" (click)="removeExtraSpaces.emit()">White-space Remove</button>
     </div>
-  </section>
 
-  <!-- STYLING -->
-  <section class="section">
-    <h3 class="section-label">Styling</h3>
-    <div class="btn-grid">
+    <!-- Row 2 -->
+    <div class="btn-row">
+      <button class="op-btn" (click)="reverseSentence.emit()">Reverse All</button>
+      <button class="op-btn" (click)="removeSpecialChars.emit()">Remove Special Char</button>
+    </div>
 
-      <button class="btn" (click)="toggleBold.emit()" title="Toggle bold">
-        <strong>B</strong>&nbsp;Bold
+    <!-- Row 3 -->
+    <div class="btn-row">
+      <button class="op-btn" (click)="removeStyling.emit()">Remove styling</button>
+      <button class="op-btn" (click)="capitalizeWords.emit()">Capitalize Word</button>
+    </div>
+
+    <!-- ── STYLING ROW — matches Image 1 exactly ── -->
+    <div class="style-row">
+
+      <!-- B -->
+      <button class="sty-btn" (click)="toggleBold.emit()" title="Bold">
+        <strong>B</strong>
       </button>
 
-      <button class="btn" (click)="toggleItalic.emit()" title="Toggle italic">
-        <em>I</em>&nbsp;Italic
+      <!-- I -->
+      <button class="sty-btn italic-btn" (click)="toggleItalic.emit()" title="Italic">
+        <em>I</em>
       </button>
 
-      <button class="btn" (click)="toggleUnderline.emit()" title="Toggle underline">
-        <span style="text-decoration:underline">U</span>&nbsp;Underline
+      <!-- U with underline -->
+      <button class="sty-btn" (click)="toggleUnderline.emit()" title="Underline">
+        <span class="u-letter">U</span>
       </button>
 
-      <!-- Color Picker: label wraps hidden input -->
-      <label class="btn color-btn" title="Pick text color">
-        <span class="btn-icon">🎨</span> Color
-        <span class="color-swatch" [style.background]="textColor"></span>
+      <!-- Rainbow color picker circle — image 1 shows rainbow/spectrum circle -->
+      <label class="sty-btn color-label" title="Text Color">
+        <span class="rainbow-circle"></span>
         <input
           type="color"
-          class="color-input"
+          class="hidden-color"
           [value]="textColor"
           (input)="onColorInput($event)"
-          aria-label="Text color picker">
+          aria-label="Text color">
       </label>
 
-      <button class="btn btn-ghost btn-wide" (click)="removeStyling.emit()" title="Reset all styles">
-        <span class="btn-icon">◌</span> Reset Styling
-      </button>
+      <!-- + font size -->
+      <button class="sty-btn size-btn" (click)="increaseFontSize.emit()" title="Increase size">+</button>
+
+      <!-- − font size -->
+      <button class="sty-btn size-btn" (click)="decreaseFontSize.emit()" title="Decrease size">−</button>
 
     </div>
-  </section>
-
-  <!-- FONT SIZE -->
-  <section class="section">
-    <h3 class="section-label">Font Size</h3>
-    <div class="font-size-controls">
-
-      <button class="btn size-btn" (click)="decreaseFontSize.emit()" aria-label="Decrease font size">
-        <span class="size-icon">−</span>
-      </button>
-
-      <span class="size-label">Aa</span>
-
-      <button class="btn size-btn" (click)="increaseFontSize.emit()" aria-label="Increase font size">
-        <span class="size-icon">+</span>
-      </button>
-
-    </div>
-  </section>
+  </div>
 
 </div>

@@ -1,4 +1,3 @@
-/* ── Global Reset & Design Tokens ── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -10,8 +9,8 @@
   --surface:      #16161a;
   --surface2:     #1e1e24;
   --border:       #2a2a35;
-  --accent:       #c8f135;    /* electric lime */
-  --accent2:      #5b6af0;    /* indigo */
+  --accent:       #c8f135;
+  --accent2:      #5b6af0;
   --text:         #e8e8f0;
   --text-muted:   #7a7a9a;
   --danger:       #ff5f5f;
@@ -23,16 +22,14 @@
 
 html, body {
   height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-mono);
+  background: #d9d9d9;
+   width: 100%;
+  font-family: Arial, sans-serif;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--surface); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent2); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #eee; }
+::-webkit-scrollbar-thumb { background: #bbb; border-radius: 3px; }
